@@ -5,6 +5,4 @@ module com.example.project1 {
 
     requires json.simple;
 
-    opens com.example.project1 to javafx.fxml;
-    exports com.example.project1;
 }
