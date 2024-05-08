@@ -24,6 +24,45 @@ public class WeatherApp {
         if (locationData == null) {
             return null;
         }
+            // Search bar
+        Label locationLabel = new Label("Enter location:");
+        locationInput = new TextField();
+        locationInput.setPromptText("E.g., New York");
+
+        // Search button
+        Button searchButton = new Button("Search");
+        searchButton.setOnAction(e -> searchWeather());
+
+        // Display area for weather information
+        weatherInfo = new Label();
+
+        // Layout
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(20, 20, 20, 20));
+        layout.getChildren().addAll(locationLabel, locationInput, searchButton, weatherInfo);
+
+        Scene scene = new Scene(layout, 300, 200);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void searchWeather() {
+        String locationName = locationInput.getText();
+        JSONObject weatherData = WeatherApp.getWeatherData(locationName);
+
+        if (weatherData != null) {
+            // Display weather information
+            double temperature = (double) weatherData.get("temperature");
+            long humidity = (long) weatherData.get("humidity");
+            double windspeed = (double) weatherData.get("windspeed");
+
+            String infoText = String.format("Temperature: %.1f°C\nHumidity: %d%%\nWindspeed: %.2f m/s",
+                    temperature, humidity, windspeed);
+            weatherInfo.setText(infoText);
+        } else {
+            weatherInfo.setText("Error: Could not retrieve weather information for the specified location.");
+        }
+    }
 
         JSONObject location = (JSONObject) locationData.get(0);
         double latitude = (double) location.get("latitude");
